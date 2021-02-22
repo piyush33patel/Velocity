@@ -1,32 +1,5 @@
-from tkinter import Tk
-from tkinter import Frame
-from tkinter import LabelFrame
-from tkinter import Text
-from tkinter import Entry
-from tkinter import NORMAL
-from tkinter import DISABLED
+from tkinter import *
 from collections import deque
-
-window = Tk()
-window.title("VELOCITY - speed + direction")
-window.geometry("600x400")
-window.minsize(width=200, height=200)
-
-text_frame = Frame(window, height=30, width=30, highlightbackground="black", highlightthickness=1)
-text_frame.pack(pady=12)
-editor_frame = LabelFrame(window, padx=2, pady=2, bd=0, text="Input your text here")
-editor_frame.pack(pady=10)
-
-text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12))
-
-file = open("Paragraphs/one.txt")
-paragraph = file.read()
-paragraph = paragraph[0:len(paragraph)-1]
-text_box.insert(1.0, paragraph)
-file.close()
-
-text_box.config(state=DISABLED)
-text_box.pack()
 
 def getCharacter(word):
     if(len(word)==1):
@@ -44,15 +17,19 @@ def getCharacter(word):
     else:
         return word
 
-toType = deque()
-for i in paragraph:
-    toType.append(i)
-typed = deque()
-user = deque()
+def openParagraph(path, paragraph, toType):
+    file = open(path)
+    paragraph = file.read()
+    paragraph = paragraph[0:len(paragraph)-1]
+    text_box.insert(1.0, paragraph)
+    text_box.config(state=DISABLED)
+    text_box.pack()
+    file.close()
+    for i in paragraph:
+        toType.append(i)
 
-def display(event):
+def display(ch):
     text_box.config(state=NORMAL)
-    ch = getCharacter(event.keysym)
     empty = False
     next = ch
     if next=="BackSpace" or next.isalnum() or next==" " or next=="." or next=="," or next==";":
@@ -78,10 +55,41 @@ def display(event):
     print(f"Pending : {len(toType)}")
     print("\n")
 
-entry_box = Entry(editor_frame, width=25, font=("", 16))
-entry_box.bind("<Key>", display)
-entry_box.pack()
-window.mainloop()
+def action(event):
+    ch = getCharacter(event.keysym)
+    display(ch)
+
+
+
+if __name__ == "__main__":
+    window = Tk()
+    window.title("VELOCITY - speed + direction")
+    window.geometry("600x400")
+    window.minsize(width=200, height=200)
+
+    text_frame = Frame(window, height=30, width=30, highlightbackground="black", highlightthickness=1)
+    text_frame.pack(pady=12)
+    editor_frame = LabelFrame(window, padx=2, pady=2, bd=0, text="Input your text here")
+    editor_frame.pack(pady=10)
+
+    text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12), wrap=WORD)
+        
+    #change this path to any file path
+    path = "Paragraphs/two.txt"
+    paragraph = ""
+    toType = deque()
+    typed = deque()
+    user = deque()
+    openParagraph(path, paragraph, toType)
+
+    entry_box = Entry(editor_frame, width=25, font=("", 16))
+    entry_box.bind("<Key>", action)
+    entry_box.pack()
+    window.mainloop()
+
+
+
+
 
 '''
 You can include these characters in your text file:
