@@ -1,33 +1,31 @@
-from tkinter import Tk
+from tkinter import *
 from tkinter import Frame
 from tkinter import LabelFrame
 from tkinter import Text
 from tkinter import Entry
 from tkinter import NORMAL
 from tkinter import DISABLED
+from tkinter.messagebox import showinfo
 from collections import deque
-#develop branch
-window = Tk()
-window.title("VELOCITY - speed + direction")
-window.geometry("600x400")
-window.minsize(width=200, height=200)
 
-text_frame = Frame(window, height=30, width=30, highlightbackground="black", highlightthickness=1)
-text_frame.pack(pady=12)
-editor_frame = LabelFrame(window, padx=2, pady=2, bd=0, text="Input your text here")
-editor_frame.pack(pady=10)
+def new_file():
+    pass
 
-text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12))
+def open_file():
+    file = open("Paragraphs/two.txt")
+    paragraph = file.read()
+    paragraph = paragraph[0: len(paragraph)-1]
+    text_box.delete(1.0, END)
+    text_box.insert(1.0, paragraph)
+    file.close()
 
-file = open("Paragraphs/one.txt")
-paragraph = file.read()
-paragraph = paragraph[0:len(paragraph)-1]
-text_box.insert(1.0, paragraph)
-file.close()
+def quit_app():
+    window.destroy()
 
-text_box.config(state=DISABLED)
-text_box.pack()
+def about_app():
+    showinfo("Velocity", "Software developed under btp project.")
 
+#function to get either character, number or escape sequence
 def getCharacter(word):
     if(len(word)==1):
         return word
@@ -44,12 +42,7 @@ def getCharacter(word):
     else:
         return word
 
-toType = deque()
-for i in paragraph:
-    toType.append(i)
-typed = deque()
-user = deque()
-
+#display function to change the colour
 def display(event):
     text_box.config(state=NORMAL)
     ch = getCharacter(event.keysym)
@@ -78,10 +71,59 @@ def display(event):
     print(f"Pending : {len(toType)}")
     print("\n")
 
-entry_box = Entry(editor_frame, width=25, font=("", 16))
-entry_box.bind("<Key>", display)
-entry_box.pack()
-window.mainloop()
+#main program starts here
+if __name__ == '__main__':
+
+    window = Tk()
+    window.title("VELOCITY - speed + direction")
+    window.geometry("600x400")
+    window.minsize(width=200, height=200)
+
+    menu_bar = Menu(window)
+    file_menu = Menu(menu_bar, tearoff = 0)
+
+    file_menu.add_command(label = "New", command = new_file)
+    file_menu.add_command(label = "Open", command = open_file)
+    file_menu.add_command(label = "Quit", command = quit_app)
+    menu_bar.add_cascade(labe = "File", menu = file_menu)
+
+    help_menu = Menu(menu_bar, tearoff = 0)
+    help_menu.add_command(label = "About Velocity", command=about_app)
+    help_menu.add_command(label = "Help")
+    menu_bar.add_cascade(label = "Help", menu=help_menu)
+
+    window.config(menu = menu_bar)
+    
+    label = Label(window, text = "Welcome User", bg = "white",
+    fg = "purple", pady = 2, padx = 10, font = ("comicsansms",15),
+    borderwidth = 10)
+    label.pack()
+
+    text_frame = Frame(window, height=30, width=30, highlightbackground="black", highlightthickness=1)
+    text_frame.pack(pady=12)
+    editor_frame = LabelFrame(window, padx=2, pady=2, bd=0, text="Input your text here")
+    editor_frame.pack(pady=10)
+
+    text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12))
+
+    file = open("Paragraphs/one.txt")
+    paragraph = file.read()
+    paragraph = paragraph[0:len(paragraph)-1]
+    text_box.insert(1.0, paragraph)
+    file.close()
+
+    text_box.config()
+    text_box.pack()
+    toType = deque()
+    for i in paragraph:
+        toType.append(i)
+    typed = deque()
+    user = deque()
+
+    entry_box = Entry(editor_frame, width=25, font=("", 16))
+    entry_box.bind("<Key>", display)
+    entry_box.pack()
+    window.mainloop()
 
 '''
 You can include these characters in your text file:
