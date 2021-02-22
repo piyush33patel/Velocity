@@ -74,23 +74,27 @@ if __name__ == "__main__":
 
     text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12), wrap=WORD)
         
-    #change this path to any file path
-    path = "Paragraphs/two.txt"
     paragraph = ""
     toType = deque()
     typed = deque()
     user = deque()
+    #this openParagraph is the default call
+    openParagraph("Paragraphs/two.txt", paragraph, toType)
+
+    '''
+    #everytime you open a file, put path of that file as path-variable
+    #and call open paragraph function
+
+    path = "Paragraphs/two.txt"
     openParagraph(path, paragraph, toType)
+    '''
 
     entry_box = Entry(editor_frame, width=25, font=("", 16))
     entry_box.bind("<Key>", action)
     entry_box.pack()
     window.mainloop()
 
-
-
-
-
+    
 '''
 You can include these characters in your text file:
 1) Alphabets
