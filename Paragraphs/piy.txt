@@ -1,3 +1,2 @@
-This is a test File
-This is the end of universe
+This is a test File. This is the end of universe
 

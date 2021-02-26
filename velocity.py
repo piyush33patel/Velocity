@@ -3,17 +3,20 @@ from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
 
-def openfile():
-    global path
+def openFile():
     path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
     if path == "":
         pass
     else: 
-        print(path)
-        #openParagraph(path, paragraph, toType)
+        toType.clear()
+        text_box.config(state=NORMAL)
+        text_box.delete("1.0", END)
+        entry_box.delete(0, END)
+        openParagraph(path, paragraph, toType)
 
 def Help():
     showinfo("Help", "We don't provide any help, we believe God help those who help themselves.")
+
 def About():
     showinfo("About", "Project developed by Rishabh and Piyush.")
 
@@ -35,6 +38,8 @@ def getCharacter(word):
         return word
 
 def openParagraph(path, paragraph, toType):
+    print("para = ", toType)
+    text_box.config(state=NORMAL)
     file = open(path)
     paragraph = file.read()
     paragraph = paragraph[0:len(paragraph)-1]
@@ -96,24 +101,13 @@ if __name__ == "__main__":
     toType = deque()
     typed = deque()
     user = deque()
-    #this openParagraph is the default call
     openParagraph(path, paragraph, toType)
 
-    '''
-    #everytime you open a file, put path of that file as path-variable
-    #and call open paragraph function
-    '''
-    
     menubar = Menu(window)
-    menubar.add_command(label = "Open", command = openfile)
+    menubar.add_command(label = "Open", command = openFile)
     menubar.add_command(label = "Help", command = Help)
     menubar.add_command(labe = "About", command = About)
-
     window.config(menu = menubar)
-    '''
-    path = "Paragraphs/two.txt"
-    openParagraph(path, paragraph, toType)
-    '''
 
     entry_box = Entry(editor_frame, width=25, font=("", 16))
     entry_box.bind("<Key>", action)
