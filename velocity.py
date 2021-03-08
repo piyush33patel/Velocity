@@ -9,6 +9,8 @@ def openFile():
         pass
     else: 
         toType.clear()
+        typed.clear()
+        user.clear()
         text_box.config(state=NORMAL)
         text_box.delete("1.0", END)
         entry_box.delete(0, END)
@@ -96,7 +98,7 @@ if __name__ == "__main__":
 
     text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12), wrap=WORD)
     
-    path = "Paragraphs/two.txt"
+    path = "Paragraphs/2.txt"
     paragraph = ""
     toType = deque()
     typed = deque()
