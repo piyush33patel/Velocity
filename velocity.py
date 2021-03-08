@@ -44,7 +44,6 @@ def getCharacter(word):
 def openParagraph(path, paragraph, toType):
     global logs
     logs = ""
-    print("open = ", logs)
     text_box.config(state=NORMAL)
     file = open(path)
     paragraph = file.read()
@@ -59,8 +58,11 @@ def openParagraph(path, paragraph, toType):
 def generateLogs():
     print(logs)
     today = datetime.today()
-    file_name = f"{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}"
+    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
     print(file_name)
+    fp = open(file_name, "w")
+    fp.write(logs)
+    fp.close()
 
 def display(ch):
     global logs
