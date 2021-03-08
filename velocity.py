@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
+from datetime import datetime
 
 def openFile():    
     path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
@@ -13,6 +14,7 @@ def openFile():
     user.clear()
     text_box.config(state=NORMAL)
     text_box.delete("1.0", END)
+    entry_box.config(state=NORMAL)
     entry_box.delete(0, END)
     openParagraph(path, paragraph, toType)
 
@@ -40,7 +42,9 @@ def getCharacter(word):
         return word
 
 def openParagraph(path, paragraph, toType):
-    print("para = ", toType)
+    global logs
+    logs = ""
+    print("open = ", logs)
     text_box.config(state=NORMAL)
     file = open(path)
     paragraph = file.read()
@@ -52,7 +56,14 @@ def openParagraph(path, paragraph, toType):
     for i in paragraph:
         toType.append(i)
 
+def generateLogs():
+    print(logs)
+    today = datetime.today()
+    file_name = f"{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}"
+    print(file_name)
+
 def display(ch):
+    global logs
     text_box.config(state=NORMAL)
     empty = False
     next = ch
@@ -69,20 +80,22 @@ def display(ch):
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
+        logs += f"{next},"
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
     text_box.tag_config("start", foreground="orange")
 
     text_box.config(state=DISABLED)
-    print(f"User : {len(user)}")
-    print(f"Progress : {len(typed)}")
-    print(f"Pending : {len(toType)}")
-    print("\n")
+    # print(f"User : {len(user)}")
+    # print(f"Progress : {len(typed)}")
+    # print(f"Pending : {len(toType)}")
+    # print("\n")
     if len(toType) == 0:
         entry_box.config(state=DISABLED)
         okay = messagebox.showinfo("Velocity", "Now analysing your typing...")
         if okay=="ok":
             print("showing typing information.....")
+            generateLogs()
         return
 
 def action(event):
@@ -104,6 +117,7 @@ if __name__ == "__main__":
 
     text_box = Text(text_frame, height=12, width=50, padx=5, pady=5, state=NORMAL, font=("", 12), wrap=WORD)
     
+    logs = ""
     path = "Paragraphs/2.txt"
     paragraph = ""
     toType = deque()
