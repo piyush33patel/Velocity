@@ -4,6 +4,7 @@ from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
 from datetime import datetime
+import os
 
 def openFile():    
     path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
@@ -60,6 +61,7 @@ def generateLogs():
     today = datetime.today()
     file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
     print(file_name)
+    os.makedirs(os.path.dirname(file_name), exist_ok=True)
     fp = open(file_name, "w")
     fp.write(logs)
     fp.close()
