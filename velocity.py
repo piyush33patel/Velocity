@@ -3,23 +3,22 @@ from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
 
-def openFile():
+def openFile():    
     path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
-    if path == "":
-        pass
-    else: 
-        toType.clear()
-        typed.clear()
-        user.clear()
-        text_box.config(state=NORMAL)
-        text_box.delete("1.0", END)
-        entry_box.delete(0, END)
-        openParagraph(path, paragraph, toType)
+    if len(path)==0 :
+        path = "Paragraphs/2.txt"
+    toType.clear()
+    typed.clear()
+    user.clear()
+    text_box.config(state=NORMAL)
+    text_box.delete("1.0", END)
+    entry_box.delete(0, END)
+    openParagraph(path, paragraph, toType)
 
-def Help():
+def help():
     showinfo("Help", "We don't provide any help, we believe God help those who help themselves.")
 
-def About():
+def about():
     showinfo("About", "Project developed by Rishabh and Piyush.")
 
 
@@ -78,6 +77,9 @@ def display(ch):
     print(f"Progress : {len(typed)}")
     print(f"Pending : {len(toType)}")
     print("\n")
+    if len(toType) == 0:
+        print("OVER")
+        return
 
 def action(event):
     ch = getCharacter(event.keysym)
@@ -107,8 +109,8 @@ if __name__ == "__main__":
 
     menubar = Menu(window)
     menubar.add_command(label = "Open", command = openFile)
-    menubar.add_command(label = "Help", command = Help)
-    menubar.add_command(labe = "About", command = About)
+    menubar.add_command(label = "Help", command = help)
+    menubar.add_command(labe = "About", command = about)
     window.config(menu = menubar)
 
     entry_box = Entry(editor_frame, width=25, font=("", 16))
