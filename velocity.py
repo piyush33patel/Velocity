@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
@@ -78,7 +79,10 @@ def display(ch):
     print(f"Pending : {len(toType)}")
     print("\n")
     if len(toType) == 0:
-        print("OVER")
+        entry_box.config(state=DISABLED)
+        okay = messagebox.showinfo("Velocity", "Now analysing your typing...")
+        if okay=="ok":
+            print("showing typing information.....")
         return
 
 def action(event):
