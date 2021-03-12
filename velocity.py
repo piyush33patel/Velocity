@@ -9,9 +9,10 @@ import os
 
 def openFile():    
     global path
-    path = askopenfilename(initialdir = "Paragraphs/", filetypes=[("Text Documents", "*.txt")])
-    if len(path)==0:
-        path = "Paragraphs/2.txt"
+    tempPath = askopenfilename(initialdir = "Paragraphs/", filetypes=[("Text Documents", "*.txt")])
+    if len(tempPath)==0:
+        return
+    path = tempPath
     toType.clear()
     typed.clear()
     user.clear()
@@ -92,10 +93,6 @@ def display(ch):
     text_box.tag_config("start", foreground="orange")
 
     text_box.config(state=DISABLED)
-    # print(f"User : {len(user)}")
-    # print(f"Progress : {len(typed)}")
-    # print(f"Pending : {len(toType)}")
-    # print("\n")
     if len(toType) == 0:
         entry_box.config(state=DISABLED)
         okay = messagebox.showinfo("Velocity", "Now analysing your typing...")
