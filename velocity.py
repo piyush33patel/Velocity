@@ -6,9 +6,10 @@ from collections import deque
 from datetime import datetime
 import os
 
+
 def openFile():    
     path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
-    if len(path)==0 :
+    if len(path)==0:
         path = "Paragraphs/2.txt"
     toType.clear()
     typed.clear()
@@ -62,13 +63,16 @@ def generateLogs():
     file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
     print(file_name)
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
-    fp = open(file_name, "w")
+    fp = open(file_name, "w", encoding='utf-16')
+    print(type(logs))
+    print(logs)
     fp.write(logs)
     fp.close()
 
 def display(ch):
     global logs
     text_box.config(state=NORMAL)
+    
     empty = False
     next = ch
     if next=="BackSpace" or next.isalnum() or next==" " or next=="." or next=="," or next==";":
