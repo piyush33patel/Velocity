@@ -8,7 +8,8 @@ import os
 
 
 def openFile():    
-    path = askopenfilename(defaultextension=".txt", filetypes=[("All files", "*.*"),("Text Documents", "*.txt")])
+    global path
+    path = askopenfilename(initialdir = "Paragraphs/", filetypes=[("Text Documents", "*.txt")])
     if len(path)==0:
         path = "Paragraphs/2.txt"
     toType.clear()
@@ -58,21 +59,18 @@ def openParagraph(path, paragraph, toType):
         toType.append(i)
 
 def generateLogs():
-    print(logs)
     today = datetime.today()
-    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
+    paragraphChosen = path[0 : len(path)-4].split("/")
+    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}-{paragraphChosen[len(paragraphChosen)-1]}.txt"
     print(file_name)
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     fp = open(file_name, "w", encoding='utf-16')
-    print(type(logs))
-    print(logs)
     fp.write(logs)
     fp.close()
 
 def display(ch):
     global logs
     text_box.config(state=NORMAL)
-    
     empty = False
     next = ch
     if next=="BackSpace" or next.isalnum() or next==" " or next=="." or next=="," or next==";":
