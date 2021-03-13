@@ -61,8 +61,7 @@ def openParagraph(path, paragraph, toType):
 
 def generateLogs():
     today = datetime.today()
-    paragraphChosen = path[0 : len(path)-4].split("/")
-    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}-{paragraphChosen[len(paragraphChosen)-1]}.txt"
+    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
     print(file_name)
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     fp = open(file_name, "w", encoding='utf-16')
@@ -71,6 +70,7 @@ def generateLogs():
 
 def display(ch):
     global logs
+    global incorrectCount
     text_box.config(state=NORMAL)
     empty = False
     next = ch
@@ -83,14 +83,21 @@ def display(ch):
                 toType.appendleft(typed.popleft())
             if empty==False:
                 user.popleft()
+            incorrectCount += 1
         else:
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
-        logs += f"{next},"
+            logs += f"{next}-{incorrectCount},"
+            incorrectCount = 0
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
     text_box.tag_config("start", foreground="orange")
+
+    print(f"User : {len(user)}")
+    print(f"Progress : {len(typed)}")
+    print(f"Pending : {len(toType)}")
+    print("\n")
 
     text_box.config(state=DISABLED)
     if len(toType) == 0:
@@ -126,6 +133,7 @@ if __name__ == "__main__":
     toType = deque()
     typed = deque()
     user = deque()
+    incorrectCount = 0
     openParagraph(path, paragraph, toType)
 
     menubar = Menu(window)
@@ -150,3 +158,5 @@ You can include these characters in your text file:
 6) Comma
 NOTE : New Line character is not allowed
 '''
+
+(9-4+1)
