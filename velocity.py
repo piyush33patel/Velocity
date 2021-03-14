@@ -62,13 +62,15 @@ def openParagraph(path, paragraph, toType):
 
 def generateLogs():
     today = datetime.today()
+    para_number = (path[0:len(path)-4])
+    para_number = para_number[len(para_number)-1]
     file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
     print(file_name)
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     fp = open(file_name, "w", encoding='utf-16')
     fp.write(logs)
     fp.close()    
-    generateDatabase(file_name)
+    generateDatabase(file_name, para_number)
 
 def display(ch):
     global logs
@@ -84,15 +86,15 @@ def display(ch):
             if empty==False and len(typed)==len(user) and typed[0]==user[0]:
                 toType.appendleft(typed.popleft())
             if empty==False:
-                incorrectCount.append(user[0])
+                incorrectCount += user[0]
                 user.popleft()
         else:
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
-            incorrectCount.reverse()
-            logs += f"{next}-{incorrectCount}%"
-            incorrectCount = []
+            incorrectCount = incorrectCount[::-1]
+            logs += f"{next}-[{incorrectCount}]%"
+            incorrectCount = ""
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
     text_box.tag_config("start", foreground="orange")
@@ -130,7 +132,7 @@ if __name__ == "__main__":
     toType = deque()
     typed = deque()
     user = deque()
-    incorrectCount = []
+    incorrectCount = ""
     openParagraph(path, paragraph, toType)
 
     menubar = Menu(window)
