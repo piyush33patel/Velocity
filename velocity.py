@@ -4,7 +4,7 @@ from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
 from datetime import datetime
-from Database import generateDatabase
+from database import generateDatabase
 import os
 
 
@@ -68,7 +68,7 @@ def generateLogs():
     fp = open(file_name, "w", encoding='utf-16')
     fp.write(logs)
     fp.close()    
-    # generateDatabase(file_name, f"Paragraphs/{paragraphChosen[len(paragraphChosen)-1]}.txt")
+    generateDatabase(file_name)
 
 def display(ch):
     global logs
@@ -90,17 +90,11 @@ def display(ch):
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
-            logs += f"{next}-{incorrectCount},"
+            logs += f"{next}-{incorrectCount}%"
             incorrectCount = 0
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
     text_box.tag_config("start", foreground="orange")
-
-    print(f"User : {len(user)}")
-    print(f"Progress : {len(typed)}")
-    print(f"Pending : {len(toType)}")
-    print("\n")
-
     text_box.config(state=DISABLED)
     if len(toType) == 0:
         entry_box.config(state=DISABLED)
