@@ -84,14 +84,15 @@ def display(ch):
             if empty==False and len(typed)==len(user) and typed[0]==user[0]:
                 toType.appendleft(typed.popleft())
             if empty==False:
+                incorrectCount.append(user[0])
                 user.popleft()
-            incorrectCount += 1
         else:
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
+            incorrectCount.reverse()
             logs += f"{next}-{incorrectCount}%"
-            incorrectCount = 0
+            incorrectCount = []
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
     text_box.tag_config("start", foreground="orange")
@@ -129,7 +130,7 @@ if __name__ == "__main__":
     toType = deque()
     typed = deque()
     user = deque()
-    incorrectCount = 0
+    incorrectCount = []
     openParagraph(path, paragraph, toType)
 
     menubar = Menu(window)
