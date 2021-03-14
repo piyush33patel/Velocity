@@ -1,24 +1,23 @@
-from collections import deque
-from os import name
+from mysql.connector import connect
 
 special = {",":"comma", ";":"semicolon", " ":"space", ".":"fullstop"}
 digits = {"0":"zero", "1":"one", "2":"two", "3":"three", "4":"four", "5":"five", "6":"six", "7":"seven", "8":"eight", "9":"nine"}
 error_map = dict()
-occur_map = dict()
+pressed_map = dict()
 
 def initializeDict():    
     for i in range(ord('a'), ord('z')+1):
         error_map[chr(i)] = 0
-        occur_map[chr(i)] = 0    
+        pressed_map[chr(i)] = 0    
     for i in range(ord('A'), ord('Z')+1):
         error_map[chr(i)] = 0
-        occur_map[chr(i)] = 0 
+        pressed_map[chr(i)] = 0 
     for i in special.values():
         error_map[i] = 0
-        occur_map[i] = 0
+        pressed_map[i] = 0
     for i in digits:
         error_map[i] = 0
-        occur_map[i] = 0
+        pressed_map[i] = 0
 
 def mapTheLog(map, character, frequecy):
     if character in special.keys():
@@ -27,7 +26,17 @@ def mapTheLog(map, character, frequecy):
         character = digits[character]
     map[character] = map[character] + int(frequecy)
 
-def generateDatabase(log_path):
+def pushToDatabase(statement):
+    mydb = connect(host="localhost", user="root", passwd="", database="velocity")
+    print(mydb)
+    cursor = mydb.cursor()
+
+    cursor.execute(statement)
+    mydb.commit()
+    mydb.close()
+    pass
+
+def generateDatabase(log_path, para_number):
     fp = open(log_path, "r", encoding='utf-16')
     logs = fp.read().split("%")
     fp.close()
@@ -35,8 +44,16 @@ def generateDatabase(log_path):
     initializeDict()
     for i in logs:
         now = i.split("-")
-        mapTheLog(error_map, now[0], now[1])
-        mapTheLog(occur_map, now[0], 1)
+        chars = str(now[0])
+        extra = now[1]
+        extra = extra[1:len(extra)-1]
+        mapTheLog(pressed_map, chars, 1)
+        for j in extra:
+            mapTheLog(pressed_map, j, 1)
+        if len(extra) > 0:
+            mapTheLog(error_map, chars, len(extra))
+    
+    # pushToDatabase()
     
     # print("printing occurences")
     # for key in error_map.keys():
@@ -45,7 +62,7 @@ def generateDatabase(log_path):
     # print("printing occurences")
 
     # print("printing occurences")
-    # for key in occur_map.keys():
-    #     if occur_map[key] != 0:
-    #         print(f"{key} : {occur_map[key]}")
+    # for key in pressed_map.keys():
+    #     if pressed_map[key] != 0:
+    #         print(f"{key} : {pressed_map[key]}")
     # print("printing occurences")

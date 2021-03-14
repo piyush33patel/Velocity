@@ -30,10 +30,12 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users(
     )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS transactions(
-    email varchar(30) NOT NULL,
     keylog_id varchar(30),
+    email varchar(30) NOT NULL,
+    para_number varchar(30) NOT NULL,
     PRIMARY KEY (keylog_id),
-    FOREIGN KEY (email) REFERENCES users(email)
+    FOREIGN KEY (email) REFERENCES users(email),
+    FOREIGN KEY (para_number) REFERENCES paragraphs(para_number)
     )''')
 
 cursor.execute(f"CREATE TABLE IF NOT EXISTS paragraphs {repeatedThing('para_number')}")
