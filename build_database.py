@@ -19,6 +19,11 @@ def repeatedThing(attribute):
     total += f"PRIMARY KEY ({attribute}))"
     return total
 
+mydb = connect(host="localhost", user="root", passwd="")
+cursor = mydb.cursor()
+cursor.execute('''CREATE DATABASE IF NOT EXISTS velocity''')
+mydb.close()
+
 mydb = connect(host="localhost", user="root", passwd="", database="velocity")
 print(mydb)
 cursor = mydb.cursor()
@@ -29,6 +34,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users(
     PRIMARY KEY (email)
     )''')
 
+cursor.execute(f"CREATE TABLE IF NOT EXISTS paragraphs {repeatedThing('para_number')}")
+cursor.execute(f"CREATE TABLE IF NOT EXISTS keys_pressed {repeatedThing('keylog_id')}")
+cursor.execute(f"CREATE TABLE IF NOT EXISTS errors_made {repeatedThing('keylog_id')}")
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS transactions(
     keylog_id varchar(30),
     email varchar(30) NOT NULL,
@@ -37,9 +46,5 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS transactions(
     FOREIGN KEY (email) REFERENCES users(email),
     FOREIGN KEY (para_number) REFERENCES paragraphs(para_number)
     )''')
-
-cursor.execute(f"CREATE TABLE IF NOT EXISTS paragraphs {repeatedThing('para_number')}")
-cursor.execute(f"CREATE TABLE IF NOT EXISTS keys_pressed {repeatedThing('keylog_id')}")
-cursor.execute(f"CREATE TABLE IF NOT EXISTS errors_made {repeatedThing('keylog_id')}")
 
 mydb.close()

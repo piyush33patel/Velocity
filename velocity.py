@@ -1,15 +1,16 @@
+import time
 from tkinter import *
 from tkinter import messagebox
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfilename
 from collections import deque
 from datetime import datetime
-from database import generateDatabase
+from push_to_database import generateDatabase
 import os
 
 
 def openFile():    
-    global path
+    global path, toType, typed, toType
     tempPath = askopenfilename(initialdir = "Paragraphs/", filetypes=[("Text Documents", "*.txt")])
     if len(tempPath)==0:
         return
@@ -64,13 +65,14 @@ def generateLogs():
     today = datetime.today()
     para_number = (path[0:len(path)-4])
     para_number = para_number[len(para_number)-1]
-    file_name = f"Key-Logs/{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}.txt"
+    timestamp = f"{today.year}{today.month}{today.day}{today.hour}{today.minute}{today.second}{today.microsecond}"
+    file_name = f"Key-Logs/{timestamp}.txt"
     print(file_name)
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     fp = open(file_name, "w", encoding='utf-16')
     fp.write(logs)
     fp.close()    
-    generateDatabase(file_name, para_number)
+    generateDatabase(timestamp, file_name, para_number)
 
 def display(ch):
     global logs
