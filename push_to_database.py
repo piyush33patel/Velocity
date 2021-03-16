@@ -62,6 +62,18 @@ def pushToDatabase(table_name, primary_key, primary_key_value, values):
         mydb.commit()
     mydb.close()
 
+def addTransaction(name, email, timestamp, para_number):
+    mydb = connect(host="localhost", user="root", passwd="", database="velocity")
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT * FROM users WHERE email='{email}'")
+    res = cursor.fetchall()
+    if len(res)==0:
+        cursor.execute(f"INSERT INTO users VALUES ('{name}', '{email}')")
+        mydb.commit()
+    cursor.execute(f"INSERT INTO transactions VALUES ('{timestamp}', '{email}', '{para_number}')")
+    mydb.commit()
+    mydb.close()
+    
 def generateDatabase(timestamp, log_path, para_number):
     fp = open(log_path, "r", encoding='utf-16')
     logs = fp.read().split("%")
@@ -82,7 +94,16 @@ def generateDatabase(timestamp, log_path, para_number):
     pushToDatabase("paragraphs", "para_number", para_number, repeatedThing(para_number, paragraph_map))
     pushToDatabase("keys_pressed", "keylog_id", timestamp, repeatedThing(timestamp, pressed_map))
     pushToDatabase("errors_made", "keylog_id", timestamp, repeatedThing(timestamp, error_map))
-    
+    user_name = ""
+    user_email = ""
+    with open("users.txt", "r") as fp:
+        user_name = fp.readline()
+        user_email = fp.readline()
+        user_name = user_name[0:len(user_name)-1]
+        user_email = user_email[0:len(user_email)-1]
+    addTransaction(user_name, user_email, timestamp, para_number)
+
+
     # print("printing occurences")
     # for key in error_map.keys():
     #     if error_map[key] != 0:
