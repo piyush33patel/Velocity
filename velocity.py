@@ -6,6 +6,7 @@ from tkinter.filedialog import askopenfilename
 from collections import deque
 from datetime import datetime
 from push_to_database import generateDatabase
+from graphs import getDataFromDatabase
 import os
 
 
@@ -73,6 +74,7 @@ def generateLogs():
     fp.write(logs)
     fp.close()    
     generateDatabase(timestamp, file_name, para_number)
+    getDataFromDatabase(para_number, timestamp)
 
 def display(ch):
     global logs
