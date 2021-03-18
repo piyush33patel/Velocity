@@ -83,8 +83,9 @@ def generateDatabase(timestamp, log_path, para_number):
     for i in logs:
         now = i.split("-")
         chars = str(now[0])
+        transition_time = int(now[1])
         mapTheLog(paragraph_map, chars, 1)
-        extra = now[1]
+        extra = now[2]
         extra = extra[1:len(extra)-1]
         mapTheLog(pressed_map, chars, 1)
         for j in extra:
@@ -102,16 +103,3 @@ def generateDatabase(timestamp, log_path, para_number):
         user_name = user_name[0:len(user_name)-1]
         user_email = user_email[0:len(user_email)-1]
     addTransaction(user_name, user_email, timestamp, para_number)
-
-
-    # print("printing occurences")
-    # for key in error_map.keys():
-    #     if error_map[key] != 0:
-    #         print(f"{key} : {error_map[key]}")
-    # print("printing occurences")
-
-    # print("printing occurences")
-    # for key in pressed_map.keys():
-    #     if pressed_map[key] != 0:
-    #         print(f"{key} : {pressed_map[key]}")
-    # print("printing occurences")

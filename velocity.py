@@ -8,6 +8,7 @@ from datetime import datetime
 from push_to_database import generateDatabase
 from graphs import getDataFromDatabase
 import os
+import time
 
 
 def openFile():    
@@ -49,7 +50,8 @@ def getCharacter(word):
         return word
 
 def openParagraph(path, paragraph, toType):
-    global logs
+    global logs, transition_time
+    transition_time = 0
     logs = ""
     text_box.config(state=NORMAL)
     file = open(path)
@@ -77,11 +79,12 @@ def generateLogs():
     getDataFromDatabase(para_number, timestamp)
 
 def display(ch):
-    global logs
-    global incorrectCount
+    global logs, incorrectCount, transition_time
     text_box.config(state=NORMAL)
     empty = False
     next = ch
+    if transition_time == 0:
+        transition_time = int((str(time.time()).split("."))[0])
     if next=="BackSpace" or next.isalnum() or next==" " or next=="." or next=="," or next==";":
         if next=='BackSpace':
             text_box.tag_remove("start", 1.0, 'end')
@@ -92,12 +95,13 @@ def display(ch):
             if empty==False:
                 incorrectCount += user[0]
                 user.popleft()
-        else:
+        else:            
             user.appendleft(next)
         if empty==False and len(typed)==len(user)-1 and toType[0]==next:
             typed.appendleft(toType.popleft())
             incorrectCount = incorrectCount[::-1]
-            logs += f"{next}-[{incorrectCount}]%"
+            current_time = int((str(time.time()).split("."))[0]) - transition_time
+            logs += f"{next}-{current_time}-[{incorrectCount}]%"
             incorrectCount = ""
 
     text_box.tag_add("start", 1.0, f'end-{len(toType)+1}c')
@@ -137,6 +141,7 @@ if __name__ == "__main__":
     typed = deque()
     user = deque()
     incorrectCount = ""
+    transition_time = 0
     openParagraph(path, paragraph, toType)
 
     menubar = Menu(window)
