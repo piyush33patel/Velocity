@@ -7,7 +7,7 @@ pressed_map = dict()
 paragraph_map = dict()
 
 
-def repeatedThing(attribute, map):
+def repeatedThing(attribute, map, *args):
     big = ""
     small = ""
     digits = ""    
@@ -23,7 +23,10 @@ def repeatedThing(attribute, map):
     values += f"{map['comma']},\n"
     values += f"{map['semicolon']},\n"
     values += f"{map['space']},\n"
-    values += f"{map['fullstop']})"
+    values += f"{map['fullstop']}\n"
+    if(len(args)>0):
+        values += f",{args[0]}"
+    values += ")"
     return values
 
 def initializeDict():    
@@ -92,7 +95,9 @@ def generateDatabase(timestamp, log_path, para_number):
             mapTheLog(pressed_map, j, 1)
         if len(extra) > 0:
             mapTheLog(error_map, chars, len(extra))
-    pushToDatabase("paragraphs", "para_number", para_number, repeatedThing(para_number, paragraph_map))
+    fp = open(f'Paragraphs/{para_number}.txt', 'r')
+    word_count = len(fp.read().split(' '))
+    pushToDatabase("paragraphs", "para_number", para_number, repeatedThing(para_number, paragraph_map, word_count))
     pushToDatabase("keys_pressed", "keylog_id", timestamp, repeatedThing(timestamp, pressed_map))
     pushToDatabase("errors_made", "keylog_id", timestamp, repeatedThing(timestamp, error_map))
     user_name = ""

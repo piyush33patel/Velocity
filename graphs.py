@@ -40,7 +40,7 @@ def getDataFromDatabase(para_number, keylog_id):
     paragraph = []
     pressed = []
     
-    for i in range(0, len(paragraph_db)):
+    for i in range(0, len(pressed_db)):
         if paragraph_db[i]==0 and error_db[i]==0 and pressed_db[i]==0:
             continue
         else:

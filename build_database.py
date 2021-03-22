@@ -1,6 +1,6 @@
 from mysql.connector import connect
 
-def repeatedThing(attribute):
+def repeatedThing(attribute, *args):
     big = ""
     small = ""
     digits = ""    
@@ -16,6 +16,8 @@ def repeatedThing(attribute):
     total += "semicolon int,\n"
     total += "space int,\n"
     total += "fullstop int,\n"
+    if(len(args)>0):
+        total += "word_count int,\n"
     total += f"PRIMARY KEY ({attribute}))"
     return total
 
@@ -34,10 +36,9 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users(
     PRIMARY KEY (email)
     )''')
 
-cursor.execute(f"CREATE TABLE IF NOT EXISTS paragraphs {repeatedThing('para_number')}")
+cursor.execute(f"CREATE TABLE IF NOT EXISTS paragraphs {repeatedThing('para_number', 'word_count')}")
 cursor.execute(f"CREATE TABLE IF NOT EXISTS keys_pressed {repeatedThing('keylog_id')}")
 cursor.execute(f"CREATE TABLE IF NOT EXISTS errors_made {repeatedThing('keylog_id')}")
-
 cursor.execute('''CREATE TABLE IF NOT EXISTS transactions(
     keylog_id varchar(30),
     email varchar(30) NOT NULL,
