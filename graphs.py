@@ -2,6 +2,7 @@ from tkinter import Label
 from mysql.connector import connect
 import matplotlib.pyplot as plt
 import numpy as np
+from suggest_para import suggestPara
 
 special = ["comma", "semicolon", "space", "fullstop"]
 digits = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
@@ -21,6 +22,8 @@ def initializeDict():
         attributes.append(i)
 
 def getDataFromDatabase(para_number, keylog_id):
+
+    suggestPara(para_number)
     mydb = connect(host="localhost", user="root", passwd="", database="velocity")
     cursor = mydb.cursor()
     cursor.execute(f"SELECT * FROM paragraphs WHERE para_number={para_number}")
